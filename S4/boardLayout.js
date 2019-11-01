@@ -68,9 +68,9 @@ function checkWinCondition(){
     if(activeSlots[n-1].rightColors[0]==colors[0]){
       if(activeSlots[n-1].rightColors[1]==colors[1]){
         if(activeSlots[n-1].rightColors[2]==colors[2]){
-          console.log("we win");
-          animationQueue.push([setAnimation]);
-          console.log(animationQueue);
+          animationQueue.push([fadeCards]);
+          animationQueue.push([pause,120]);
+          animationQueue.push([fadeLines]);
           //the next one is not an animation, but we want it to happen after the win animation
           animationQueue.push([nextRound]);
         }

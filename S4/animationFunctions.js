@@ -40,7 +40,7 @@ function growLines(){
     animationQueue.shift();
   }
 }
-function setAnimation(){
+function fadeCards(){
   if(activeSlots[0].cardBack.opacity>0){
     for(var i=0;i<activeSlots.length;i++){
       activeSlots[i].cardBack.opacity-=.01;
@@ -52,7 +52,12 @@ function setAnimation(){
       activeSlots[i].innerCircle.opacity-=.01;
     }
   }
-  else if(activeSlots[0].blackPaths[0].opacity>0){
+  else{
+    animationQueue.shift();
+  }
+}
+function fadeLines(){
+  if(activeSlots[0].blackPaths[0].opacity>0){
     for(var i=0;i<activeSlots.length;i++){
       for(var j=0;j<4;j++){
         activeSlots[i].blackPaths[j].opacity-=.01;
@@ -71,6 +76,15 @@ function setAnimation(){
         powerBalls[i][j].opacity -= .01;
       }
     }
+  }
+  else{
+    animationQueue.shift();
+  }
+}
+//
+function pause(){
+  if(animationQueue[0][1]>0){
+    animationQueue[0][1]-=1;
   }
   else{
     animationQueue.shift();
