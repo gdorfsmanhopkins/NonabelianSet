@@ -21,7 +21,7 @@ var freeze = false;
 //There should be only one Board at a time, called Game, which is referenced ubiquitously
 //This is likely not the best practice...
 
-var Game = new Board(7,10);
+var Game = new Board(7,4);
 Game.newRound();
 
 

@@ -13,7 +13,7 @@ var numberOfSlots = 7;
 
 //how many y positions do we need?
 //for Sn, we need n+1
-var yPositions = 10;
+var yPositions = 6;
 
 //use this to compute the card size:
 var cardWidth = 3*screenWidth/(4*numberOfSlots + 2);
