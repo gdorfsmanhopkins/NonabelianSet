@@ -18,7 +18,7 @@ class Card {
 
     this.cardBack = two.makeRoundedRectangle(0,0,cardWidth,cardHeight,15);
     this.cardBack.fill = 'lightgrey';
-    this.cardBack.stroke = 'black';
+    this.cardBack.stroke = 'darkgrey';
 
     this.center = [0,0];
 
@@ -28,7 +28,7 @@ class Card {
     //create all the paths
     for(var i=0;i<numberOfLines;i++){
       var newBlackPath = two.makePath(xList[0],yList[i],xList[1],yList[i],xList[2],yList[this.lineEndings[i]],xList[3],yList[this.lineEndings[i]],open = true);
-      newBlackPath.stroke = 'black';
+      newBlackPath.stroke = 'darkgrey';
       newBlackPath.fill = 'none';
       newBlackPath.linewidth = 2;
 
@@ -201,6 +201,7 @@ function generatePermutation(numberOfLetters){
 function deal(){
   for(var i=0;i<inactiveSlots.length;i++){
     if(inactiveSlots[i]==null){
+      console.log("Inactive Slot:",i);
       newPermutation = generatePermutation(yPositions-1);
       inactiveSlots[i] = new Card(yPositions - 1,newPermutation);
       inactiveSlots[i].moveTo(inactivePositions[i]);

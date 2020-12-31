@@ -74,8 +74,9 @@ function checkWinCondition(){
       }
     }
     if(winning==true){
+      //animationQueue.push([fadeAll])
       animationQueue.push([fadeCards]);
-      animationQueue.push([pause,120]);
+      //animationQueue.push([pause,120]);
       animationQueue.push([fadeLines]);
       //the next one is not an animation, but we want it to happen after the win animation
       animationQueue.push([nextRound]);

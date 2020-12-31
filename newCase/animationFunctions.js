@@ -42,13 +42,13 @@ function growLines(){
 function fadeCards(){
   if(activeSlots[0].cardBack.opacity>0){
     for(var i=0;i<activeSlots.length;i++){
-      activeSlots[i].cardBack.opacity-=.01;
+      activeSlots[i].cardBack.opacity-=fadingSpeed;
     }
   }
   else if(activeSlots[0].outerCircle.opacity>0){
     for(var i=0;i<activeSlots.length;i++){
-      activeSlots[i].outerCircle.opacity-=.01;
-      activeSlots[i].innerCircle.opacity-=.01;
+      activeSlots[i].outerCircle.opacity-=fadingSpeed;
+      activeSlots[i].innerCircle.opacity-=fadingSpeed;
     }
   }
   else{
@@ -59,20 +59,20 @@ function fadeLines(){
   if(activeSlots[0].blackPaths[0].opacity>0){
     for(var i=0;i<activeSlots.length;i++){
       for(var j=0;j<yPositions-1;j++){
-        activeSlots[i].blackPaths[j].opacity-=.01;
-        activeSlots[i].colorPaths[j].opacity-=.01;
+        activeSlots[i].blackPaths[j].opacity-=fadingSpeed;
+        activeSlots[i].colorPaths[j].opacity-=fadingSpeed;
       }
     }
     for(var i=0;i<numberOfSlots-1;i++){
       for(var j=0;j<yPositions-1;j++){
-        powerLines[i][j].opacity -=.01;
+        powerLines[i][j].opacity -=fadingSpeed;
       }
     }
   }
   else if(powerBalls[0][0].opacity>0){
     for(var i=0;i<2*numberOfSlots;i++){
       for(var j=0;j<yPositions-1;j++){
-        powerBalls[i][j].opacity -= .01;
+        powerBalls[i][j].opacity -=fadingSpeed;
       }
     }
   }
@@ -80,6 +80,7 @@ function fadeLines(){
     animationQueue.shift();
   }
 }
+
 function pause(){
   if(animationQueue[0][1]>0){
     animationQueue[0][1]-=1;

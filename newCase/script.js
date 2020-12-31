@@ -5,66 +5,110 @@ var params = { fullscreen: true };
 var two = new Two(params).appendTo(elem);
 
 //Save the width and the height of the screen
-var screenWidth = screen.width;
-var screenHeight = screen.height;
+var screenWidth = window.innerWidth;
+var screenHeight = window.innerHeight;
 
 //How big is a hand?
-var numberOfSlots = 7;
+var numberOfSlots = 11;
 
 //how many y positions do we need?
 //for Sn, we need n+1
-var yPositions = 6;
+var yPositions = 4;
 
-//use this to compute the card size:
-var cardWidth = 3*screenWidth/(4*numberOfSlots + 2);
-var cardHeight = 5*cardWidth/3;
+//How fast do cards fade when you win?
+var fadingSpeed = .05;
 
 var animationQueue = [];  //keeps animations in order
 var cardList = []; //keeps track of cards on the table
 
-//Positions of things relative to the origin
-var yList = [];
-for(var i=0;i<yPositions;i++){
-  yList.push(-.4*cardHeight + .8*i*cardHeight/(yPositions-1));
-}
-var xList = [-cardWidth/2,-cardWidth/4,cardWidth/4,cardWidth/2];
-
-//Save the colors of each row as global variables. (top to bottom)
-var colors = [];
-for(var i=0;i<yPositions-1;i++){
-  j = Math.floor(100*i/(yPositions-1));
-  //console.log('0x'+rainbow.colourAt(j));
-  colors.push('#'+rainbow.colourAt(j));
-}
-
-
 //The following lists store positions of cards (globally!)
 var activeSlots = [];
 var inactiveSlots = [];
-for(var i=0;i<numberOfSlots;i++){
-  inactiveSlots.push(null);
-}
 
-//also store the active and inactive positions.  We add one to each list to help with some computations of lines and balls later
+//Keeps track of the coordinates of the card placements
+var activePositions = [];
+var inactivePositions = [];
+
+//This is the y coordinates of those placements
 var activeY = 0.2*screenHeight;
 var inactiveY = 0.6*screenHeight;
 
-var activePositions = [];
-var inactivePositions = [];
-for(var i=0;i<numberOfSlots+1;i++){
-  nextX = cardWidth*(1+4*i/3);
-  activePositions.push([nextX,activeY]);
-  inactivePositions.push([nextX,inactiveY]);
+//These are the balls at the end of cards and lines connecting cards.  They will need to be initialized every time I reset.
+var powerBalls;
+var powerLines;
+
+//global variables  They will be set in the initialize function.
+var cardWidth;
+var cardHeight;
+var yList;
+var xList;
+var colors;
+
+
+function initialize(){
+    //First make the background
+    var background = two.makeRoundedRectangle(screenWidth/2,screenHeight/2,2*screenWidth,2*screenHeight);
+    background.fill = 'black';
+
+    //use this to compute the card size:
+    cardWidth = 3*screenWidth/(4*numberOfSlots + 2);
+    cardHeight = 5*cardWidth/3;
+
+    //Positions of things relative to the origin
+    yList = [];
+    for(var i=0;i<yPositions;i++){
+      yList.push(-.4*cardHeight + .8*i*cardHeight/(yPositions-1));
+    }
+    xList = [-cardWidth/2,-cardWidth/4,cardWidth/4,cardWidth/2];
+
+    //Save the colors of each row as global variables. (top to bottom)
+    colors = [];
+    for(var i=0;i<yPositions-1;i++){
+      j = Math.floor(100*i/(yPositions-1));
+      //console.log('0x'+rainbow.colourAt(j));
+      colors.push('#'+rainbow.colourAt(j));
+    }
+
+    //Initially no cards are active, so deal knows to put a card there.
+    activeSlots = [];
+    inactiveSlots = [];
+    for(var i=0;i<numberOfSlots;i++){
+      inactiveSlots.push(null);
+    }
+
+    //initialize coordinates of card placements
+    activePositions = [];
+    inactivePositions = [];
+    for(var i=0;i<numberOfSlots+1;i++){
+      nextX = cardWidth*(1+4*i/3);
+      activePositions.push([nextX,activeY]);
+      inactivePositions.push([nextX,inactiveY]);
+    }
+
+    //Deal
+    deal();
+
+    //make our balls and lines
+    powerBalls = makeBalls();
+    powerLines = makeLines();
+
+    //Grow the first column of balls
+    for (var i=0;i<yPositions-1;i++){
+      //console.log(colors[i]);
+      powerBalls[0][i].fill=colors[i];
+      animationQueue.push([growBalls,0]);
+    }
 }
 
-deal();
-var powerBalls = makeBalls();
-var powerLines = makeLines();
-for (var i=0;i<yPositions-1;i++){
-  console.log(colors[i]);
-  powerBalls[0][i].fill=colors[i];
-  animationQueue.push([growBalls,0]);
-}
+var settings = QuickSettings.create(screenWidth/10,8*screenHeight/10,"Settings");
+settings.addNumber("How many lines?",1,50,3,1,function setLines(value){yPositions=value+1});
+settings.addNumber("Size of hand?",1,20,7,1,function setHandSize(value){numberOfSlots = value});
+settings.addButton("Apply Changes",function applyChanges(){initialize()});
+
+
+
+
+
 
 function on_mouse_down(event){
     if(animationQueue.length==0){
@@ -107,6 +151,8 @@ function animate(){
   two.update();
   requestAnimationFrame(animate);
 }
+
+initialize();
 requestAnimationFrame(animate);
 
 /*TO DO:
