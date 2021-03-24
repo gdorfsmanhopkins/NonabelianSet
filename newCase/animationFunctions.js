@@ -32,7 +32,7 @@ function growBalls(){
 function growLines(){
   if(powerLines[animationQueue[0][1]][0].dashes.offset > 0){
     for(var i=0;i<yPositions-1;i++){
-      powerLines[animationQueue[0][1]][i].dashes.offset -= 25;
+      powerLines[animationQueue[0][1]][i].dashes.offset -= halfLineLength/4;
     }
   }
   else{
@@ -63,14 +63,14 @@ function fadeLines(){
         activeSlots[i].colorPaths[j].opacity-=fadingSpeed;
       }
     }
-    for(var i=0;i<numberOfSlots-1;i++){
+    for(var i=0;i<numberOfSlots;i++){
       for(var j=0;j<yPositions-1;j++){
         powerLines[i][j].opacity -=fadingSpeed;
       }
     }
   }
   else if(powerBalls[0][0].opacity>0){
-    for(var i=0;i<2*numberOfSlots;i++){
+    for(var i=0;i<2*numberOfSlots+1;i++){
       for(var j=0;j<yPositions-1;j++){
         powerBalls[i][j].opacity -=fadingSpeed;
       }

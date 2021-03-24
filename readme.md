@@ -6,7 +6,7 @@ index.html: sets up the website and calls the scripts
 
 script.js: I guess this is like the brain of the whole operation.  It calculates all the positions of the slots, it's where you can choose how many cards in a hand and how large your group is.  It also holds the animation queue and runs the animation loop.  The loop runs once every time the screen refreshes, and goes through the animation queue one by one to do the next step in the animation for each thing in the queue (and checks if there's a win).  It also hangs out waiting on mouse clicks, and remembers which cards are where (in lists...the cards themselves are objects...)
 
-cardClasses.js: I did this in an 'object oriented' way, so each card is an object.  It remembers what it looks like (i.e., what permutation it is, whether it has been played), and has a bunch of built in functions, (colorizing its lines, moving around, drawing and deleting itsef, etc...).  I think one can also deal here.
+cardClasses.js: I did this in an 'object oriented' way, so each card is an object.  It remembers what it looks like (i.e., what permutation it is, whether it has been played), and has a bunch of built in functions, (colorizing its lines, moving around, drawing and deleting itself, etc...).  I think one can also deal here.
 
 boardLayout.js: This puts all the dots and lines on the board (not on the cards).  It also discards cards and starts a new round.  For some reason checkWinCondition is here too.
 

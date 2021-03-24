@@ -28,7 +28,7 @@ function moveBalls(column,ballGroup){
 }
 
 function makeLines(){
-  halfLineLength = (xList[0]+4*cardWidth/3)-xList[3];
+  //halfLineLength = (xList[0]+4*cardWidth/3)-xList[3]; This might be better as a global variable to help consistently offset the dashes on different sized screens
   lines = []
   for(var i=0;i<numberOfSlots+1;i++){
     nextColumn = []
@@ -38,8 +38,8 @@ function makeLines(){
       newLine.stroke = 'none';
       newLine.fill = 'none';
       newLine.linewidth = 5;
-      newLine.dashes[0] = 50;
-      newLine.dashes.offset = 50;
+      newLine.dashes[0] = halfLineLength;
+      newLine.dashes.offset = halfLineLength;
       lineGroup.add(newLine);
       nextColumn.push(newLine);
     }

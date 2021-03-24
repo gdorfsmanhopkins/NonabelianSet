@@ -124,7 +124,7 @@ class Card {
     //NOTE: 7 and 16 should be replaced by cardsInPlay and 2*(cardsInPlay+1)
     for(var i = this.onPosition;i<numberOfSlots + 1;i++){
       for(var j=0;j<this.numberOfLines;j++){
-        powerLines[i][j].dashes.offset=50;
+        powerLines[i][j].dashes.offset=halfLineLength;
         powerLines[i][j].stroke = 'none'
       }
     }

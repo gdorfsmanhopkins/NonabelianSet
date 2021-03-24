@@ -9,7 +9,7 @@ var screenWidth = window.innerWidth;
 var screenHeight = window.innerHeight;
 
 //How big is a hand?
-var numberOfSlots = 11;
+var numberOfSlots = 7;
 
 //how many y positions do we need?
 //for Sn, we need n+1
@@ -89,6 +89,7 @@ function initialize(){
     deal();
 
     //make our balls and lines
+    halfLineLength = (xList[0]+4*cardWidth/3)-xList[3]; //This gives me line lengths, which the cards like to access too
     powerBalls = makeBalls();
     powerLines = makeLines();
 
@@ -100,14 +101,11 @@ function initialize(){
     }
 }
 
+//Here are settings that allow you to adjust the game a bit
 var settings = QuickSettings.create(screenWidth/10,8*screenHeight/10,"Settings");
 settings.addNumber("How many lines?",1,50,3,1,function setLines(value){yPositions=value+1});
 settings.addNumber("Size of hand?",1,20,7,1,function setHandSize(value){numberOfSlots = value});
 settings.addButton("Apply Changes",function applyChanges(){initialize()});
-
-
-
-
 
 
 function on_mouse_down(event){
