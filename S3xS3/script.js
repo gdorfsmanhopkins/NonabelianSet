@@ -9,11 +9,13 @@ var screenWidth = window.innerWidth;
 var screenHeight = window.innerHeight;
 
 //How big is a hand?
-var numberOfSlots = 7;
+var numberOfSlots = 8;
 
 //how many y positions do we need?
-//for Sn, we need n+1
-var yPositions = 4;
+var firstProduct = 3;
+var secondProduct = 3;
+var yPositions = firstProduct+secondProduct;
+
 
 //How fast do cards fade when you win?
 var fadingSpeed = .05;
@@ -56,16 +58,21 @@ function initialize(){
 
     //Positions of things relative to the origin
     yList = [];
-    for(var i=0;i<yPositions;i++){
-      yList.push(-.4*cardHeight + .8*i*cardHeight/(yPositions-1));
+    //Add 2 to the yList in order to have room for the top and bottom
+    for(var i=0;i<yPositions+2;i++){
+      yList.push(-.4*cardHeight + .8*i*cardHeight/(yPositions+1));
     }
     xList = [-cardWidth/2,-cardWidth/4,cardWidth/4,cardWidth/2];
 
     //Save the colors of each row as global variables. (top to bottom)
     colors = [];
-    for(var i=0;i<yPositions-1;i++){
-      j = Math.floor(100*i/(yPositions-1));
+    for(var i=0;i<firstProduct;i++){
+      j = Math.floor(35*i/(firstProduct));
       //console.log('0x'+rainbow.colourAt(j));
+      colors.push('#'+rainbow.colourAt(j));
+    }
+    for(var i=0;i<secondProduct;i++){
+      j = 60+Math.floor(40*i/(secondProduct));
       colors.push('#'+rainbow.colourAt(j));
     }
 
@@ -94,19 +101,20 @@ function initialize(){
     powerLines = makeLines();
 
     //Grow the first column of balls
-    for (var i=0;i<yPositions-1;i++){
+    for (var i=0;i<yPositions;i++){
       //console.log(colors[i]);
       powerBalls[0][i].fill=colors[i];
       animationQueue.push([growBalls,0]);
     }
 }
 
-//Here are settings that allow you to adjust the game a bit
+//Here are settings that allow you to adjust the game a bit  COMMENTED OUT FOR THE TIME BEING
+/*
 var settings = QuickSettings.create(screenWidth/10,8*screenHeight/10,"Settings");
 settings.addNumber("How many lines?",1,50,3,1,function setLines(value){yPositions=value+1});
 settings.addNumber("Size of hand?",1,20,7,1,function setHandSize(value){numberOfSlots = value});
 settings.addButton("Apply Changes",function applyChanges(){initialize()});
-
+*/
 
 function on_mouse_down(event){
     if(animationQueue.length==0){

@@ -11,7 +11,7 @@ function animateMove(){
 }
 function animateColors(){
   if(animationQueue[0][1].colorPaths[0].dashes.offset>0){
-    for(var i=0;i<yPositions-1;i++){
+    for(var i=0;i<yPositions;i++){
       animationQueue[0][1].colorPaths[i].dashes.offset-=25;
     }
   }
@@ -20,18 +20,20 @@ function animateColors(){
   }
 }
 function growBalls(){
-  if(powerBalls[animationQueue[0][1]][0].radius<5.1){
-    for(var i=0;i<yPositions-1;i++){
+  if(powerBalls[animationQueue[0][1]][1].radius<5.1){
+    console.log("Growing");
+    for(var i=0;i<yPositions;i++){
       powerBalls[animationQueue[0][1]][i].radius+=1;
     }
   }
   else{
+    console.log("Shifting");
     animationQueue.shift();
   }
 }
 function growLines(){
   if(powerLines[animationQueue[0][1]][0].dashes.offset > 0){
-    for(var i=0;i<yPositions-1;i++){
+    for(var i=0;i<yPositions;i++){
       powerLines[animationQueue[0][1]][i].dashes.offset -= halfLineLength/4;
     }
   }
@@ -58,20 +60,20 @@ function fadeCards(){
 function fadeLines(){
   if(activeSlots[0].blackPaths[0].opacity>0){
     for(var i=0;i<activeSlots.length;i++){
-      for(var j=0;j<yPositions-1;j++){
+      for(var j=0;j<yPositions;j++){
         activeSlots[i].blackPaths[j].opacity-=fadingSpeed;
         activeSlots[i].colorPaths[j].opacity-=fadingSpeed;
       }
     }
     for(var i=0;i<numberOfSlots;i++){
-      for(var j=0;j<yPositions-1;j++){
+      for(var j=0;j<yPositions;j++){
         powerLines[i][j].opacity -=fadingSpeed;
       }
     }
   }
   else if(powerBalls[0][0].opacity>0){
     for(var i=0;i<2*numberOfSlots+1;i++){
-      for(var j=0;j<yPositions-1;j++){
+      for(var j=0;j<yPositions;j++){
         powerBalls[i][j].opacity -=fadingSpeed;
       }
     }

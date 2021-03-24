@@ -4,8 +4,8 @@ function makeBalls(){
   for (var i=0;i<2*numberOfSlots+2;i++){
     var nextColumn = [];
     var ballGroup = two.makeGroup();
-    for(var k=0;k<yPositions-1;k++){
-      newCircle = two.makeCircle(0,yList[k],0);
+    for(var k=0;k<yPositions;k++){
+      newCircle = two.makeCircle(0,yList[k+1],0);
       newCircle.stroke = 'none';
       newCircle.fill = 'none';
       nextColumn.push(newCircle);
@@ -33,13 +33,13 @@ function makeLines(){
   for(var i=0;i<numberOfSlots+1;i++){
     nextColumn = []
     var lineGroup = two.makeGroup();
-    for(var j=0;j<yPositions-1;j++){
-      newLine = two.makePath(-1*halfLineLength,yList[j],0,yList[j],open=true);
+    for(var j=0;j<yPositions;j++){
+      newLine = two.makePath(-1*halfLineLength,yList[j+1],0,yList[j+1],open=true);
       newLine.stroke = 'none';
       newLine.fill = 'none';
       newLine.linewidth = 5;
-      newLine.dashes[0] = halfLineLength;
-      newLine.dashes.offset = halfLineLength;
+      newLine.dashes[0] = 1.5*halfLineLength;
+      newLine.dashes.offset = 1.5*halfLineLength;
       lineGroup.add(newLine);
       nextColumn.push(newLine);
     }
@@ -55,7 +55,7 @@ function moveLines(column,lineGroup){
 function cleanUpActive(i){
   activeSlots.splice(i,1);
   for(j = i;j<activeSlots.length;j++){
-    for(k=0;k<yPositions-1;k++){
+    for(k=0;k<yPositions;k++){
       activeSlots[j].colorPaths[k].dashes.offset=300;
     }
     activeSlots[j].moveTo(activePositions[j]);
@@ -67,7 +67,7 @@ function checkWinCondition(){
   var n = activeSlots.length;
   if(n>2){
     winning = true;
-    for(var i=0;i<yPositions-2;i++){
+    for(var i=0;i<yPositions;i++){
       if(activeSlots[n-1].rightColors[i]!=colors[i]){
         winning=false;
         break
@@ -91,7 +91,7 @@ function nextRound(){
   deal();
   powerBalls = makeBalls();
   powerLines = makeLines();
-  for (var i=0;i<yPositions-1;i++){
+  for (var i=0;i<yPositions;i++){
     powerBalls[0][i].fill=colors[i];
     animationQueue.push([growBalls,0]);
   }
