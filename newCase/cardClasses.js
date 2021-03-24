@@ -19,6 +19,7 @@ class Card {
     this.cardBack = two.makeRoundedRectangle(0,0,cardWidth,cardHeight,15);
     this.cardBack.fill = 'lightgrey';
     this.cardBack.stroke = 'darkgrey';
+    this.cardBack.linewidth = 3;
 
     this.center = [0,0];
 
