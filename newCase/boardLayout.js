@@ -38,8 +38,8 @@ function makeLines(){
       newLine.stroke = 'none';
       newLine.fill = 'none';
       newLine.linewidth = 5;
-      newLine.dashes[0] = halfLineLength;
-      newLine.dashes.offset = halfLineLength;
+      newLine.dashes[0] = 1.5*halfLineLength;
+      newLine.dashes.offset = 1.5*halfLineLength;
       lineGroup.add(newLine);
       nextColumn.push(newLine);
     }

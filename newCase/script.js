@@ -9,7 +9,7 @@ var screenWidth = window.innerWidth;
 var screenHeight = window.innerHeight;
 
 //How big is a hand?
-var numberOfSlots = 7;
+var numberOfSlots = 8;
 
 //how many y positions do we need?
 //for Sn, we need n+1
@@ -103,9 +103,12 @@ function initialize(){
 
 //Here are settings that allow you to adjust the game a bit
 var settings = QuickSettings.create(screenWidth/10,8*screenHeight/10,"Settings");
-settings.addNumber("How many lines?",1,50,3,1,function setLines(value){yPositions=value+1});
-settings.addNumber("Size of hand?",1,20,7,1,function setHandSize(value){numberOfSlots = value});
-settings.addButton("Apply Changes",function applyChanges(){initialize()});
+settings.addDropDown("Which Symmetric Group?",["S3","S4","S5"], function apply(value){
+  yPositions = value.index+4;
+  initialize();
+})
+//settings.addButton("S4",function applyS4(){yPositions=5;initiaize()});
+//settings.addButton("S5",function applyS5(){yPositions=6;initialize()});
 
 
 function on_mouse_down(event){
