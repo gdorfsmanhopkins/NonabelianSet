@@ -80,6 +80,9 @@ function cleanUpActive(i){
   for(j = i;j<activeSlots.length;j++){
     for(k=0;k<yPositions-1;k++){
       activeSlots[j].colorPaths[k].dashes.offset=300;
+      if(activeSlots[j].action[k]){
+        activeSlots[j].actionDots[k].stroke='none';
+      }
     }
     activeSlots[j].moveTo(activePositions[j]);
     activeSlots[j].onPosition = j;

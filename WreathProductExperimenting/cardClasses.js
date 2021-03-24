@@ -64,6 +64,7 @@ class Card {
 
       var newActionDot = two.makeCircle((xList[0]+xList[1])/2,yList[i],5);
       newActionDot.stroke = 'none';
+      newActionDot.linewidth = 2;
       if(this.action[i]){
         newActionDot.fill = 'black';
       }
@@ -189,6 +190,9 @@ class Card {
       this.rightDottedPaths[i].stroke = 'none';
       this.leftDotted[i] = null;
       this.rightDotted[i] = null;
+      if(this.action[i]){
+        this.actionDots[i].stroke = 'none';
+      }
     }
     //decolorize the balls and lines too!
     //NOTE: 7 and 16 should be replaced by cardsInPlay and 2*(cardsInPlay+1)

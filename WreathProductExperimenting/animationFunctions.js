@@ -11,6 +11,13 @@ function animateMove(){
 }
 function animateColors(){
   if(animationQueue[0][1].colorPaths[0].dashes.offset>0){
+    if(animationQueue[0][1].colorPaths[0].dashes.offset<275){
+      for(var i=0;i<yPositions-1;i++){
+        if(animationQueue[0][1].action[i]){
+          animationQueue[0][1].actionDots[i].stroke = animationQueue[0][1].leftColors[i];
+        }
+      }
+    }
     for(var i=0;i<yPositions-1;i++){
       animationQueue[0][1].colorPaths[i].dashes.offset-=25;
     }
