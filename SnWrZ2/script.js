@@ -103,12 +103,16 @@ function initialize(){
 }
 
 //Here are settings that allow you to adjust the game a bit
-/*
-var settings = QuickSettings.create(screenWidth/10,8*screenHeight/10,"Settings");
-settings.addNumber("How many lines?",1,50,3,1,function setLines(value){yPositions=value+1});
-settings.addNumber("Size of hand?",1,20,8,1,function setHandSize(value){numberOfSlots = value});
-settings.addButton("Apply Changes",function applyChanges(){initialize()});
-*/
+var firstTime=true;
+var gameSettings = QuickSettings.create(screenWidth/10,8*screenHeight/10,"Game Settings");
+gameSettings.addDropDown("Choose Group",["S2 ≀ Z2","S3 ≀ Z2","S4 ≀ Z2","S5 ≀ Z2"], function firstFactor(value){
+  if(!firstTime){
+    yPositions = value.index + 3
+    initialize();
+  }
+});
+gameSettings.setValue("Choose Group",1);
+firstTime=false;
 
 function on_mouse_down(event){
     if(animationQueue.length==0){

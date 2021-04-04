@@ -109,12 +109,23 @@ function initialize(){
 }
 
 //Here are settings that allow you to adjust the game a bit  COMMENTED OUT FOR THE TIME BEING
-/*
-var settings = QuickSettings.create(screenWidth/10,8*screenHeight/10,"Settings");
-settings.addNumber("How many lines?",1,50,3,1,function setLines(value){yPositions=value+1});
-settings.addNumber("Size of hand?",1,20,7,1,function setHandSize(value){numberOfSlots = value});
-settings.addButton("Apply Changes",function applyChanges(){initialize()});
-*/
+var firstTime=true;
+var gameSettings = QuickSettings.create(screenWidth/10,8*screenHeight/10,"Game Settings");
+gameSettings.addDropDown("Choose Group",["S2 x S2","S3 x S2","S4 x S2", "S3 x S3", "S4 x S3", "S4 x S4"], function firstFactor(value){
+  value = value.index;
+  if(value<3){secondProduct = 2}
+  if(value>2 && value<5){secondProduct = 3}
+  if(value==5){firstProduct = secondProduct = 4}
+  if(value==0){firstProduct = 2}
+  if(value==1||value==3){firstProduct = 3}
+  if(value==4||value==2){firstProduct = 4}
+  if(!firstTime){
+    yPositions = firstProduct+secondProduct;
+    initialize();
+  }
+});
+gameSettings.setValue("Choose Group",3);
+firstTime=false;
 
 function on_mouse_down(event){
     if(animationQueue.length==0){

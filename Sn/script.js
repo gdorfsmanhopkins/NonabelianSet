@@ -13,7 +13,7 @@ var numberOfSlots = 8;
 
 //how many y positions do we need?
 //for Sn, we need n+1
-var yPositions = 4;
+var yPositions = 5;
 
 //How fast do cards fade when you win?
 var fadingSpeed = .05;
@@ -44,6 +44,13 @@ var yList;
 var xList;
 var colors;
 
+//Have a global list of cards in play and remember if we allow allow repeats
+var allowRepeats = false;
+var activeCards;
+
+//Variable to remember if we want to keep order fixed and whether to include identity
+var fixedOrder = false;
+var allowIdentity = true;
 
 function initialize(){
     //First make the background
@@ -70,6 +77,7 @@ function initialize(){
     }
 
     //Initially no cards are active, so deal knows to put a card there.
+    activeCards = [];
     activeSlots = [];
     inactiveSlots = [];
     for(var i=0;i<numberOfSlots;i++){
@@ -86,7 +94,9 @@ function initialize(){
     }
 
     //Deal
+    console.log("about to deal");
     deal();
+    console.log("dealt");
 
     //make our balls and lines
     halfLineLength = (xList[0]+4*cardWidth/3)-xList[3]; //This gives me line lengths, which the cards like to access too
@@ -102,14 +112,41 @@ function initialize(){
 }
 
 //Here are settings that allow you to adjust the game a bit
-var settings = QuickSettings.create(screenWidth/10,8*screenHeight/10,"Settings");
-settings.addDropDown("Which Symmetric Group?",["S3","S4","S5"], function apply(value){
-  yPositions = value.index+4;
-  initialize();
-})
-//settings.addButton("S4",function applyS4(){yPositions=5;initiaize()});
-//settings.addButton("S5",function applyS5(){yPositions=6;initialize()});
+//for setting the controlls the first time
+var firstPass = true;
 
+var gameSettings = QuickSettings.create(screenWidth/10,8*screenHeight/10,"Game Settings");
+gameSettings.addDropDown("Which Symmetric Group?",["S3","S4","S5","S6","S7"], function applyGroup(value){
+  yPositions = value.index+4;
+  if(yPositions==4 & !allowRepeats){
+    firstPass=true;
+    rules.setValue("Allow Repeats?",true);
+    firstPass=false;
+  }
+  if(!firstPass){
+    initialize();
+  }})
+gameSettings.setValue("Which Symmetric Group?",1);
+gameSettings.addDropDown("Size of hand?",["7","8","9","10"], function applySize(value){numberOfSlots = value.index+7;
+  if(!firstPass){
+    initialize();
+  }})
+gameSettings.setValue("Size of hand?",1);
+
+var rules = QuickSettings.create(3.5*screenWidth/10,8*screenHeight/10,"Rules");
+rules.addBoolean("Allow Repeats?",false,function repeatButton(value){
+  if(value==false & yPositions==4){
+    rules.setValue("Allow Repeats?",true);
+  }
+  else{
+    allowRepeats = value;
+    if(!firstPass){initialize();}
+  }
+})
+rules.addBoolean("Fix Order?",false,function orderButton(value){fixedOrder = value;initialize();})
+rules.addBoolean("Include Identity?",true,function identityButton(value){allowIdentity = value;initialize()})
+
+firstPass = false;
 
 function on_mouse_down(event){
     if(animationQueue.length==0){
