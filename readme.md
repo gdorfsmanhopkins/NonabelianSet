@@ -1,6 +1,6 @@
 Here's a brief description of the code.
 
-I think S3 and S4 are what's currently on my website, but I think newCase is the most up to date.  restructuring is a work in progress that I thought might be useful because I think it was kinda dumb the way I made it, but it might be more work than it's worth to rebuild.  I'll briefly describe the convoluted structure of the whole thing, although most the function names are self-explanatory maybe?  There's also varying degrees of commenting
+Right now Sn, SnWrZ2, and SnxSm are what are running on my website.  Sn0 is also on my website, and is a work in progress with adjustable rules and settings (in particular coloring the cards in order to preserve order).
 
 index.html: sets up the website and calls the scripts
 
@@ -10,7 +10,7 @@ cardClasses.js: I did this in an 'object oriented' way, so each card is an objec
 
 boardLayout.js: This puts all the dots and lines on the board (not on the cards).  It also discards cards and starts a new round.  For some reason checkWinCondition is here too.
 
-animationFunctions.js: Exactly what it sounds like.  This is the main thing I may want to rehash, because everything can only animate one at a time.  I think the better javascripty way to do this is with arrow functions (I think this is what I was trying to do with restructuring, but I was having trouble keeping track of order of stuff).
+animationFunctions.js: Exactly what it sounds like.  This is the main thing I may want to rehash, because everything can only animate one at a time.  I think there is a better more javascripty way to do this with arrow functions (I think this is what I was trying to do with restructuring, but I was having trouble keeping track of order of stuff).
 
 menuScreen.js: Does nothing.
 

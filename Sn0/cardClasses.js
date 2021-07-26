@@ -17,7 +17,7 @@ class Card {
     }
 
     this.cardBack = two.makeRoundedRectangle(0,0,cardWidth,cardHeight,15);
-    this.cardBack.fill = 'lightgrey';
+    this.cardBack.fill = '#D3D3D3';
     this.cardBack.stroke = 'darkgrey';
     this.cardBack.linewidth = 3;
 
@@ -30,6 +30,9 @@ class Card {
     for(var i=0;i<numberOfLines;i++){
       var newBlackPath = two.makePath(xList[0],yList[i],xList[1],yList[i],xList[2],yList[this.lineEndings[i]],xList[3],yList[this.lineEndings[i]],open = true);
       newBlackPath.stroke = 'darkgrey';
+      if(fixedOrder){
+        newBlackPath.stroke = 'black';
+      }
       newBlackPath.fill = 'none';
       newBlackPath.linewidth = 2;
 
@@ -138,9 +141,16 @@ class Card {
   }
   activate(){
     this.activated = true;
-    this.onPosition = activeSlots.length
-    this.moveTo(activePositions[this.onPosition]);
-    activeSlots.push(this);
+    if(fixedOrder){
+      this.onPosition = findInsertionPoint(this.offPosition);
+      activeSlots.splice(this.onPosition,0,this);
+      insertCard(this.onPosition);
+    }
+    else{
+      this.onPosition = activeSlots.length
+      this.moveTo(activePositions[this.onPosition]);
+      activeSlots.push(this);
+    }
     inactiveSlots[this.offPosition] = null;
     this.colorize();
   }
@@ -173,16 +183,6 @@ class Card {
     this.center = [-100,-100];
   }
 }
-class S3Card extends Card{
-  constructor(lineEndings){
-    super(3,lineEndings)
-  }
-}
-class S4Card extends Card{
-  constructor(lineEndings){
-    super(4,lineEndings);
-  }
-}
 
 function generatePermutation(numberOfLetters){
   //list of integers 0,..,n-1
@@ -199,12 +199,114 @@ function generatePermutation(numberOfLetters){
   }
   return randomList;
 }
+function arraysEqual(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length !== b.length) return false;
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+}
+function checkIfCardActive(card){
+  for(var x=0;x<activeCards.length;x++){
+    if(arraysEqual(activeCards[x],card)){
+      return true;
+    }
+  }
+  return false;
+}
+function notIdentity(permutation){
+  for(var i=0;i<yPositions-1;i++){
+    if(permutation[i]!=i){
+      return true;
+    }
+  }
+  return false
+}
+function generateCardData(){
+  if(allowRepeats&allowIdentity){
+    return generatePermutation(yPositions-1);
+  }
+  if(allowRepeats){
+    while(true){
+      newPermutation = generatePermutation(yPositions-1);
+      if(notIdentity(newPermutation)){
+        return newPermutation;
+      }
+    }
+  }
+  while(true){
+    newPermutation = generatePermutation(yPositions-1);
+    if(!checkIfCardActive(newPermutation)){
+      if(allowIdentity||notIdentity(newPermutation)){
+        activeCards.push(newPermutation);
+        return newPermutation;
+      }
+    }
+  }
+}
+function shiftColor(base, change, direction) {
+  const colorRegEx = /^\#?[A-Fa-f0-9]{6}$/;
+
+  // Missing parameter(s)
+  if (!base || !change) {
+    return '000000';
+  }
+
+  // Invalid parameter(s)
+  if (!base.match(colorRegEx) || !change.match(colorRegEx)) {
+    return '000000';
+  }
+
+  // Remove any '#'s
+  base = base.replace(/\#/g, '');
+  change = change.replace(/\#/g, '');
+
+  // Build new color
+  let newColor = '';
+  for (let i = 0; i < 3; i++) {
+    const basePiece = parseInt(base.substring(i * 2, i * 2 + 2), 16);
+    const changePiece = parseInt(change.substring(i * 2, i * 2 + 2), 16);
+    let newPiece = '';
+
+    if (direction === 'add') {
+      newPiece = (basePiece + changePiece);
+      newPiece = newPiece > 255 ? 255 : newPiece;
+    }
+    if (direction === 'sub') {
+      newPiece = (basePiece - changePiece);
+      newPiece = newPiece < 0 ? 0 : newPiece;
+    }
+
+    newPiece = newPiece.toString(16);
+    newPiece = newPiece.length < 2 ? '0' + newPiece : newPiece;
+    newColor += newPiece;
+  }
+
+  return '#' + newColor;
+}
+
 function deal(){
   for(var i=0;i<inactiveSlots.length;i++){
+    //This loop checks if we've already used the card.
     if(inactiveSlots[i]==null){
-      console.log("Inactive Slot:",i);
-      newPermutation = generatePermutation(yPositions-1);
+      newPermutation = generateCardData();
       inactiveSlots[i] = new Card(yPositions - 1,newPermutation);
+      //If we're doing fixed order, use opacity to give a gradient to the cards
+      if(fixedOrder){
+        console.log(inactiveSlots[i].cardBack.fill);
+        adding = (25*i).toString(16);
+        adding = adding + '0000';
+        while (adding.length < 6) {
+          adding = "0" + adding;
+        }
+        adding = '#'+adding;
+        console.log(adding);
+        inactiveSlots[i].cardBack.fill = shiftColor(inactiveSlots[i].cardBack.fill,adding,'sub');
+        console.log(inactiveSlots[i].cardBack.fill);
+      }
       inactiveSlots[i].moveTo(inactivePositions[i]);
       inactiveSlots[i].offPosition = i;
       cardList[i] = inactiveSlots[i];

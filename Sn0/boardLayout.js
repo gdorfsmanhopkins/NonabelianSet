@@ -52,6 +52,35 @@ function moveLines(column,lineGroup){
   lineGroup.translation.set(inactivePositions[column][0] - cardWidth/2,activeY);
 }
 
+function findInsertionPoint(newPosition){
+  for(var actives=0;actives<activeSlots.length;actives++){
+    if(newPosition<activeSlots[actives].offPosition){
+      return actives;
+    }
+  }
+  return activeSlots.length;
+}
+function insertCard(startingPoints){
+  for(j = activeSlots.length-1;j>startingPoints;j--){
+    for(k=0;k<yPositions-1;k++){
+      activeSlots[j].colorPaths[k].dashes.offset=300;
+      powerLines[j][k].dashes.offset=1.5*halfLineLength;
+      powerLines[j][k].stroke = 'none'
+      powerBalls[2*j][k].radius = 0;
+      powerBalls[2*j][k].fill = 'none';
+      powerBalls[2*j+1][k].radius = 0;
+      powerBalls[2*j+1][k].fill = 'none';
+    }
+    activeSlots[j].moveTo(activePositions[j]);
+    activeSlots[j].onPosition = j;
+  }
+  activeSlots[startingPoints].moveTo(activePositions[startingPoints]);
+  for(j=startingPoints;j<activeSlots.length;j++){
+    activeSlots[j].colorize();
+  }
+
+}
+
 function cleanUpActive(i){
   activeSlots.splice(i,1);
   for(j = i;j<activeSlots.length;j++){
@@ -85,6 +114,15 @@ function checkWinCondition(){
 }
 function nextRound(){
   for(var i=0;i<activeSlots.length;i++){
+    //if were not allowing repeats we must remove the cards from the list of those in play
+      if(!allowRepeats){
+      for(var j=0;j<activeCards.length;j++){
+        if(activeSlots[i].lineEndings==activeCards[j]){
+          activeCards.splice(j,1);
+          j--;
+        }
+      }
+    }
     activeSlots[i].destroy();
   }
   activeSlots = [];
